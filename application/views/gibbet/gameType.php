@@ -12,8 +12,8 @@
           <p><i>Ще изгубите текущата игра и това ще се отрази във Вашата статистика!</i></p>
         </div>
         <div class="modal-footer-wc">
-         <button type="submit"  name="loseExit" form="playForm" class="btn btn-warning"  id="exitDB" >ИЗХОД</button>
-         <button type="submit" name="newWordRequest"  form="playForm" class="btn btn-warning"  id="newGame" >НОВА ИГРА</button>
+         <button type="button"  class="btn btn-warning"  id="exitDB" >ИЗХОД</button>
+         <button type="button" class="btn btn-warning"  id="newGame" disabled>НОВА ИГРА</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Обратно в играта</button>
         </div>
       </div>
@@ -75,7 +75,8 @@
     </div>
   </div><!-- success modal end -->    
     
-    
+ <!-- my project JS -->  <script src="<?php echo base_url();?>assets/js_gibb/gibbet.js"></script>
+ 
     
  <?php echo $jscript; ?>
  
@@ -102,17 +103,16 @@
         <option value="cities">Градове</option>  
         <option value="plants">Растения</option>  
        
-      </select>   
-                   
-  <button type="button" class="btn btn-block btn-primary" id="startGame" disabled ><span class="glyphicon glyphicon-ok" ></span>&nbsp ПОТВЪРДИ</button>
-  
+      </select>                      
+  <button type="button" class="btn btn-block btn-primary" id="startGame" disabled ><span class="glyphicon glyphicon-ok" ></span>&nbsp ПОТВЪРДИ</button>  
     <br>
     </div>
     </div> 
-    
-     <button  type="submit" name="wordRequest" class="btn btn-link" id="hiddenstart"></button>    
- <button  type="submit" name="exitUser" class="btn btn-link" id="hiddenexit"></button>    <!-- to make Submit working normally with Enter key it's better to have just one submmit in a form. For other I use hidden button to serve other outside the form  - JS file and controller-->           
-
+  <!-- to make Submit working normally with Enter key it's better to have just one submmit in a form. For other I use hidden buttons to serve other outside the form  - JS file and controller-->           
+<button  type="submit" name="wordRequest" class="btn btn-link" id="hiddenstart1"></button>    
+<button  type="submit" name="exitUser" class="btn btn-link" id="hiddenexit1"></button>    
+<button type="submit"  name="loseExit"  class="btn btn-link"  id="hiddenexit2" ></button>
+<button type="submit" name="newWordRequest"  class="btn btn-link"  id="hiddenstart2" ></button>
  
  <div class="col-sm-6">
 
@@ -165,10 +165,10 @@
   <div class="row">
    <div class="col-sm-7">
   <h4>СТАТИСТИКА за играч <?php echo $name; ?>:</h4>
-            
+    <div class="table-responsive">          
   <table class="table table-bordered">
     <thead>
-      <tr>
+      <tr class="info">
         <th>Изиграни игри</th>
         <th>Спечелени</th>
         <th>Изгубени</th>
@@ -178,7 +178,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="success">
         <td><?php echo $total; ?></td>
         <td><?php echo $won; ?></td>
         <td><?php echo $lost; ?></td>
@@ -188,6 +188,7 @@
       
     </tbody>
   </table>
+  </div>
   </div>
   </div>
 

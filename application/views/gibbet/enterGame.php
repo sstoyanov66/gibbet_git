@@ -59,6 +59,8 @@
     </div>
   </div><!-- wrong code modal end -->
      
+<!-- my project JS --> <script src="<?php echo base_url();?>assets/js_gibb/gibbet_enter.js"></script>
+  
  
   <?php echo $nonamepass; ?> <!-- placed here to serve JS triggers of the modals above  - see  how it works with their session variables in validation functions in the controller -->
 
