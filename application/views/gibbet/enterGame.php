@@ -27,7 +27,7 @@
           <h4 class="modal-title">Внимание, проверете дали е активиран Caps Lock!</h4>
         </div>
         <div class="modal-body">
-         <label for="name"><span class="glyphicon glyphicon-user"></span><span > Нов играч - името да е на Кирилица!:</span></label>
+         <label for="name"><span class="glyphicon glyphicon-user"></span><span > Нов играч - името да е на Кирилица с не повече от 20 символа!:</span></label>
  <input  type="text" name="newname" form="signForm" class="form-control" placeholder="Въведете тук потребителско име"  style=" background-color: #cce6ff;"> 
    <br>
   <label for="pswr"><span class="glyphicon glyphicon-eye-open"></span><span  > Парола - да е поне с 5 символа!:</span></label>
