@@ -49,13 +49,15 @@ $(document).ready(function(){
 
     /*to enable/disable start game and new game buttons - only if there's option selected*/
     
-    $('#slctType').focus(function () {
+    $('#slctPlayer').focus(function () {
 		 	
         if ($(this).val() == '') {
-            $('#startGame').prop('disabled', true);
+            $('#challng').prop('disabled', true);
+         //   $('#startGame').prop('disabled', true);
             $('#newGame').prop('disabled', true);
         } else {
-            $('#startGame').prop('disabled', false);
+            $('#challng').prop('disabled', false);
+          //  $('#startGame').prop('disabled', false);
             $('#newGame').prop('disabled', false);
                         
         }
@@ -88,32 +90,31 @@ $(document).ready(function(){
 	   }	       
      	});
    
-    /*to click the hidden buttons inside the input form form outside:*/
+   /*to click the hidden buttons inside the input form form outside:*/
    $('#exitDB').on('click', function () {   
        
        $('#hiddenexit2').click();
 			    
      	});
+      
    
-   /*try online game or go online:*/  
-   
-   $('#tryOnline').on('click', function () { 
+   /*try Self game or  go there */
+   $('#onself').on('click', function () { 
          
 	   if ( $('#word').html()!=""){
-	   $('#warnOnlineModal').modal('show'); 
+	   $('#warnSelfModal').modal('show'); 
 	   }else{
 	      
-		    $('#hiddenonline1').click();
+		   $('#hiddenonself').click();
 	   }	       
      	});
    
- $('#onlineDB').on('click', function () {   
+   /*to click the hidden buttons inside the input form form outside:*/
+   $('#gotoSelf').on('click', function () {   
        
-       $('#hiddenonline2').click();
+       $('#hiddenonself2').click();
 			    
      	});
-        
-      
    
    /*try to start a new game - check if there's a current one:*/
    $('#startGame').on('click', function () { 
@@ -126,13 +127,53 @@ $(document).ready(function(){
 	      	 	
    });
    
+   /*privent modal to close on background click */
+  $("#challangeAcceptModal").on('shown.bs.modal', function (){    	 		 
+		 this.modal({ 
+			 show: true,
+           backdrop: 'static',// to prevent close modal on background click
+           keyboard: false  // to prevent closing with Esc button (if you want this too)
+       })   			   
+  });
+		  
+   
    /*to click the hidden buttons inside the input form form outside:*/
    $('#newGame').on('click', function () {        	       	
        $('#hiddenstart2').click();
 			    
+     	});   
+   
+   $('#reject_challng').on('click', function () {        	       	
+       $('#hiddenreject').click();
+			    
      	});
-
-         
+   $('#reject_offer').on('click', function () {        	       	
+       $('#hiddenreject').click();
+			    
+     	});
+   
+   $('#accept_challng').on('click', function () {        	       	
+       $('#hiddenaccept').click();
+			    
+     	});
+   
+   /*push the button to clear the winner progress to privent same modal to show*/
+   $("#loseOnlineModal").on('hidden.bs.modal', function (){    	 		 
+	   if(typeof(EventSource) !== 'undefined') {
+			
+           var source = new EventSource('clear_opponent_progress'); //the function in the controller
+           source.onmessage = function(event) {
+   			
+     //something to do related with data sent by php function?!
+           };
+                   } else {
+           window.alert('Съжаляваме,Браузърът Ви нe поддържа SSE - HTML5 !');
+   			
+           }
+     			   
+});
+   
+   
    
     /*initialize Letter buttons with Cyrillic values*/
    document.getElementById("a").value = "а"; document.getElementById("b").value = "б"; document.getElementById("v").value = "в"; document.getElementById("g").value = "г";
