@@ -17,19 +17,69 @@ class Gibbet_model extends CI_Model {
           return $gamername;
     }
     
-    public function get_users()	{ // get user's name and hashed password
+    public function get_users($columns)	{ // get user's name and hashed password
         
-        $this->db->select('id, name, enterpass');        
+        $this->db->select($columns);        
         $query = $this->db->get('users');
         return $query->result_array(); 
     }
     
-  
-    public function get_hidden_word()	{ 
+    public function login_user($username){
+        
+        $update = array("logged_in"=>true );
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    
+    public function logout_user($username){
+      
+        $update = array("logged_in"=>false );
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    public function challng_user($username, $enemy){
+       
+        $update = array("challenge_by"=>$enemy );
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    
+    public function unchallng_user($username){
+        
+        $update = array("challenge_by"=>"" );
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    
+    public function ingame_user($username){
+        
+        $update = array("in_game"=>true );
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    
+    public function outgame_user($username){
+        
+        $update = array("in_game"=>false,"challenge_by"=>"","word_online"=>"", "discrip_online"=> "", "hidden_online"=>"");
+        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    }
+    
+    public function get_challenge($username){
+        
+        $this->db->select('challenge_by');
+        $query = $this->db->get_where('users',"name = "."'".$username."'");       
+        $challenge=$query->row_array();
+        
+        if($challenge){
+        $opponent =  $challenge["challenge_by"];
+        return $opponent;
+        }else{
+              return "";
+        }
+    
+    }
+    
+    
+    public function get_hidden_word($online,$username)	{ //!!!THERE SHOULDN'T BE ID's MISSING IN USERS TABLE  because of delition or manual data insert !!!!
         
  /*Prepare n-words expression with string operations only*/
         
-        $wordArray = $this-> get_word(); // get a random word from a table selected by user by option list
+        $wordArray = $this-> get_word($online,$username); // get a random word from a table selected by user by option list
         $word=$wordArray [0]; $discrip=$wordArray [1];
         
     	$wordsArray=explode(' ', $word);   //array of all words in the string --in case there are more than 1 word
@@ -52,21 +102,30 @@ class Gibbet_model extends CI_Model {
     		
     	}
     	//$intvls = str_repeat(" ",2);
-    	$wholeWord='';
+    	$hiddenWord='';
     	for($w = 0; $w < count($words); $w++) {
    		 		
-    	    $wholeWord.= $words[$w].'   ';
+    	    $hiddenWord.= $words[$w].'   ';
     	}
     	   	
-    	return [$wholeWord,$discrip];
+    	if($online){
+    	    $update = array("hidden_online"=>$hiddenWord);
+    	    $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+    	}
+    	
+    	return [$hiddenWord,$discrip];
     }
     
     
-    public function get_word()	{ // get a random word from a table selected by user by option list
+    private function get_word($online, $username)	{ // get a random word from a table selected by user by option list
+      
+       $this->db->select('id');
+       
+        if(!$online){ // logic for gametype() controller method
+                
+        $type=$this->input->post('slcType'); 
         
-        $type=$this->input->post('slcType');
-        
-        $this->db->select('id');
+      
         if($type=='animals'){
             $query = $this->db->get('animals');
         }else if($type=='cities'){
@@ -75,11 +134,28 @@ class Gibbet_model extends CI_Model {
             $query = $this->db->get('plants');
         }
         
+        }else{ // logic for gameonline() controller method
+                      
+            $tableID = rand(1,3); //get random table for selection in online mode
+            
+            if( $tableID==1){
+                $type='animals';
+                $query = $this->db->get('animals');
+            }else if( $tableID==2){
+                $type='cities';
+                $query = $this->db->get('cities');
+            }else if( $tableID==3){
+                $type='plants';
+                $query = $this->db->get('plants');
+            }                       
+        }
+        
+        
         $allIDs =$query->result_array(); //<--
         
         $columnlength = count($allIDs);
         
-        $wordID = rand(1,$columnlength); //get random id from min to max (!!!There should not be id's missing in users table !!!! because of delition)
+        $wordID = rand(1,$columnlength); //<--!!!!! get random id from min to max (!!!THERE SHOULDN'T BE ID's MISSING IN USERS TABLE  because of delition or manual data insert !!!!)
         
         $this->db->select('word, discrip');
         if($type=='animals'){
@@ -103,8 +179,34 @@ class Gibbet_model extends CI_Model {
         $_SESSION["gibbetWord"]=$word;
      //   $_SESSION["gibbetDiscrip"]=$discrip;
     
+        if($online){
+            $update = array("word_online"=>$word, "discrip_online"=> $discrip);
+            $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        }               
+        
         return [$word,$discrip];
     }
+    
+    
+    public function get_opponent_word($enemy){
+        $this->db->select('hidden_online, discrip_online, word_online');
+        $query = $this->db->get_where('users','name = '."'".$enemy."'");
+        $word=$query->row_array(); 
+        
+        $wordReturn=array();
+        $hidden =$discrip=$real ='';
+        if($word){
+            
+            $hidden =  $word['hidden_online']; $discrip= $word['discrip_online']; $real= $word['word_online'];
+           
+            array_push($wordReturn, $hidden );array_push($wordReturn,$discrip);array_push($wordReturn,$real);
+   
+        }
+        
+        return $wordReturn;
+                
+    }
+    
     
     public function guess_Letter($usedSymbols){
         
@@ -117,7 +219,8 @@ class Gibbet_model extends CI_Model {
         	    
         $wordsArray=explode(' ', $word);   //array of all words in the string --in case there are more than 1 word
         $arrlength = count($wordsArray);
-        $yes_no=$ok=false; // the letter is guessed/not
+        
+        $yes_no= $ok =false; // the letter / word is guessed/not
         $currHiddenWord= array(); //
         $words=array(); //
         $usedLetters=$usedSymbols;
@@ -132,20 +235,20 @@ class Gibbet_model extends CI_Model {
         	$usedlength=count($usedSymbols);
         	       	
         	$currHiddenWord[0]= $arrayLetters[0];
-        	$currHiddenWord[$wrdlngth-1]= $arrayLetters[$wrdlngth-1];;
+        	$currHiddenWord[$wrdlngth-1]= $arrayLetters[$wrdlngth-1];
         	
         	for($i = 1; $i < $wrdlngth-1; $i++){
         		$currHiddenWord[$i]=' _';
         	}
         	
-        	for($i = 0; $i < $wrdlngth; $i++){
+        	for($i = 0; $i < $wrdlngth-1; $i++){
         		for($d = 0; $d < $usedlength; $d++){
         			
-        			if ($usedSymbols[$d] ==$arrayLetters[$i]) {
+        			if ($arrayLetters[$i] ==$usedSymbols[$d]) { //<--keep already guessed letters
         				$currHiddenWord[$i]=$usedSymbols[$d];
         			}
         			
-        			if ($arrayLetters[$i]==$letter_field ){
+        			if ($arrayLetters[$i]==$letter_field ){ //<--new guessed letter
         				$currHiddenWord[$i]=$letter_field;
         				
         				array_push($usedLetters,$letter_field);
@@ -247,6 +350,42 @@ class Gibbet_model extends CI_Model {
         $this->db->set($rec_data)->where('name', $username)->update('users'); // <--update user statistics columns
         
     
+    }
+    
+    public function get_progress($oppname){
+        
+        $this->db->select('curr_letters, curr_word, curr_guess');
+        $query = $this->db->get_where('users','name = '."'".$oppname."'");
+        $stat=$query->row_array();
+        
+        $statistics=array();
+        $total=$won=$instant=0;
+        if($stat){            
+        	$total = $stat['curr_letters']; $won=$stat['curr_word']; $instant=$stat['curr_guess'];                      
+            array_push($statistics,$total); array_push($statistics,$won); array_push($statistics,$instant);           
+        }
+        
+        return $statistics;
+    }
+    
+    
+    public function set_progress($username,$addArray){
+    	$total=$won=$instant=0;
+    	
+        $currStat=$this->get_progress($username);
+        $total= $currStat[0]+$addArray[0];	$won=$currStat[1]+$addArray[1];	$instant=$currStat[2]+$addArray[2];
+       
+        $rec_data = array('curr_letters' => $total, 'curr_word' =>$won, 'curr_guess'=>$instant);
+        $this->db->set($rec_data)->where('name', $username)->update('users'); // <--update user statistics columns
+        
+        
+    }
+    
+    public function clear_progress($username){
+        
+        $rec_data = array('curr_letters' => "", 'curr_word' =>"", 'curr_guess'=>"");
+        $this->db->set($rec_data)->where('name', $username)->update('users'); // <--update user statistics columns
+        
     }
     
 }
