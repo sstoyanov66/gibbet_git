@@ -94,15 +94,14 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
-/*
- *---------------------------------------------------------------
+/**---------------------------------------------------------------
  * SYSTEM DIRECTORY NAME
  *---------------------------------------------------------------
  *
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = '/home/your path/system';
+	$system_path = 'system';
 
 /*
  *---------------------------------------------------------------
@@ -119,7 +118,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '/home/your path/application';
+	$application_folder = 'application';
 
 /*
  *---------------------------------------------------------------
