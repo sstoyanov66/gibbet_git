@@ -34,13 +34,14 @@ if(is_cli()){ //<-- Codeigniter function to check if the site is accessed from C
 	$config['base_url'] = ''; // exclude it to be able to configure the base_url dynamically
 
 }else if(stristr($host, "localhost") !== FALSE || stristr($host, '192.168.') !== FALSE || stristr($host, '127.0.0') !== FALSE){
-	$config['base_url'] = $protocol. $host ."/PROJECT_FOLDER/";
+	$config['base_url'] = $protocol. $host ."/gibbet/";
 }else{
 
 	$allowed_hosts = ['gibbet.sstoyanov.eu', 'www.gibbet.sstoyanov.eu'];
 	$config['base_url'] = in_array($host, $allowed_hosts) ? $protocol.$host."/" : "we-do-not-recognise-this-host.com";
 }
 
+//$config['base_url'] = 'http://localhost:8080/gibbet/'; 
 
 //FOR BOTH HTTP and SECURE SITE  see http://sajjadhossain.com/2008/10/27/ssl-https-urls-and-codeigniter/:
 //$config['secure_base_url'] = 'https://codeignit.sstoyanov.eu/';
@@ -542,8 +543,25 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 /*
- * See also gibb.css and the controller. In Form_validation class default erro_prefix is <p>
- * Remove here the next 2 $config if you want to return it back.
+ |--------------------------------------------------------------------------
+ | E-mail configuration - See E-mail Class library instructions in CodeIgniter Manuel
+ |--------------------------------------------------------------------------
+ |
+ | This lets you specify e-mail configuration according to your mail setting. 
+ | 
+ */
+$config['protocol'] = 'sendmail';
+$config["smtp_host"] = "server26.superhosting.bg";  //  smtp-out.spf.superhosting.bg
+$config["smtp_port"] = "25";  //587
+//$config["smtp_crypto"] ='ssl'; //or'tls';
+$config["dsn"] = false; //Enable notify message from server
+$config["smtp_user"] = "info@sstoyanov.eu";
+$config["smtp_pass"] = "100yan4o"; 
+
+
+/*
+ * See also depoNariad.css and Nariad controller. In Form_validation class default erro_prefix is <p>
+ * Remove here the next 2 $config if you want to return it.
  * */
 $config['error_prefix'] = '<div class="error">';
 $config['error_suffix'] = '</div>';
