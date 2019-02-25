@@ -1,11 +1,11 @@
-<!--  this is php code to require https secure protocol      -->
-<?php
+<!--  this is php code to require https secure protocol    
+
 if ($_SERVER['HTTPS'] != "on") {
     $url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
     header("Location: $url");
     exit();
-}
-?>
+}  -->
+<?php?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
