@@ -15,27 +15,32 @@
 	  
 		  }//end  enableButton
 							
-		
+			
 $(document).ready(function(){
 
-	
-    /*This is to Enable/disable the button for entire word
+	  /*This is needed in the controller for the purpose of "close- browser -before -end" watch dog*/
 
-       $('#guess').focus(function () {
-   		 	
-           if ($('#guess').val()!='' && $('#word').html()!="") {
-               $('#guessButt').prop('disabled', false);         
-           } else {
-               $('#guessButt').prop('disabled', true);                       
-           }
-       });
-          */
-    
-    /*disable Enter key if the word is not guessed to prevent new word load w/o warning message and losing game*/
+	   $('#guessButt').on('click',function(){
+	 if(!$(this).data('clickedBefore')) {
+		 $(this).data('clickedBefore', true) 
+	  }  
+	})
+	
+     /*control Enter key function if the word is guessed or not loaded  -
+     * 1. When player is not selected: Prevent any other submit button be pressed and losing game by the "watch dog" on page reload 
+     * 2. When player is selected:  Prevent any other submit button be pressed and push the putton for challenge 
+     * 3. In case the word field is not empty use Enter key for instant guess only*/
     $(document).keypress(
 	    function(event){
-	      if ( $('#word').html()!="" && event.which == '13') {
+	      if ( $('#word').html()=="" && $('#slctPlayer').val()=="" && event.which == '13') {
 	        event.preventDefault();
+	         
+	      }else if($('#word').html()=="" && $('#slctPlayer').val()!="" && event.which == '13'){
+	    	  event.preventDefault();
+	    	  $('#challng').click();
+	      }else if($('#word').html()!="" && $('#guess').val()!="" && event.which == '13'){
+	    	  event.preventDefault();
+	    	  $('#guessButt').click();
 	      }
 	  });
     
@@ -47,30 +52,38 @@ $(document).ready(function(){
       	});
     
 
-    /*to enable/disable start game and new game buttons - only if there's option selected*/
+    /*to enable/disable buttons - only if there's option selected  */
     
-    $('#slctPlayer').focus(function () {
+    $('#slctPlayer').change(function () {
 		 	
         if ($(this).val() == '') {
             $('#challng').prop('disabled', true);
-         //   $('#startGame').prop('disabled', true);
-            $('#newGame').prop('disabled', true);
+     
         } else {
+        	
             $('#challng').prop('disabled', false);
-          //  $('#startGame').prop('disabled', false);
-            $('#newGame').prop('disabled', false);
-                        
+           
         }
     });
     
+    /*
+    $('#slctPlayer').blur(function () {   
+      
+    	if($('#challng').data('clicked')){
+   
+    	 }else{ 
+    		 
+    		 $('#challng').prop('disabled', true);
+        	 $(this).val("");
+    	}
+    });
+   */
     
-    /*to enable/disable Letter buttons*/
-   if ($('#word').html()!=""){
-           $('.btn-sm').prop('disabled', false);
-                       
-      }else{  
-    	  $('.btn-sm').prop('disabled', true);
-     }
+    /*to disable Letter buttons if word dissapear*/
+    if ($('#word').html()==""){
+        
+     	  $('.btn-sm').prop('disabled', true);
+      }
     
     /*	 if (this.keyCode== 13 && $('#word').html()!="") { 
 	        $('#warnModal').modal('show'); 
@@ -126,16 +139,7 @@ $(document).ready(function(){
 		   }
 	      	 	
    });
-   
-   /*privent modal to close on background click */
-  $("#challangeAcceptModal").on('shown.bs.modal', function (){    	 		 
-		 this.modal({ 
-			 show: true,
-           backdrop: 'static',// to prevent close modal on background click
-           keyboard: false  // to prevent closing with Esc button (if you want this too)
-       })   			   
-  });
-		  
+     
    
    /*to click the hidden buttons inside the input form form outside:*/
    $('#newGame').on('click', function () {        	       	
@@ -157,7 +161,9 @@ $(document).ready(function(){
 			    
      	});
    
-   /*push the button to clear the winner progress to privent same modal to show*/
+   
+   
+   /*push the button to clear the winner progress to privent same modal to show in the loser browser*/
    $("#loseOnlineModal").on('hidden.bs.modal', function (){    	 		 
 	   if(typeof(EventSource) !== 'undefined') {
 			
@@ -172,18 +178,27 @@ $(document).ready(function(){
            }
      			   
 });
+      
    
-   
-   
-    /*initialize Letter buttons with Cyrillic values*/
+    /*initialize Letter buttons with Cyrillic values
    document.getElementById("a").value = "а"; document.getElementById("b").value = "б"; document.getElementById("v").value = "в"; document.getElementById("g").value = "г";
-   document.getElementById("d").value = "д"; document.getElementById("e").value = "е"; document.getElementById("zh").value = "ж"; document.getElementById("z").value = "з"
-document.getElementById("i").value = "и"; document.getElementById("ii").value = "й"; document.getElementById("k").value = "к"; document.getElementById("l").value = "л"
-document.getElementById("m").value = "м"; document.getElementById("n").value = "н"; document.getElementById("o").value = "о"; document.getElementById("p").value = "п"   
+   document.getElementById("d").value = "д"; document.getElementById("e").value = "е"; document.getElementById("zh").value = "ж"; document.getElementById("z").value = "з";
+document.getElementById("i").value = "и"; document.getElementById("ii").value = "й"; document.getElementById("k").value = "к"; document.getElementById("l").value = "л";
+document.getElementById("m").value = "м"; document.getElementById("n").value = "н"; document.getElementById("o").value = "о"; document.getElementById("p").value = "п";   
 	 document.getElementById("r").value = "р"; document.getElementById("s").value = "с"; document.getElementById("t").value = "т"; document.getElementById("u").value = "у";
-	   document.getElementById("f").value = "ф"; document.getElementById("h").value = "х"; document.getElementById("c").value = "ц"; document.getElementById("ch").value = "ч"
-	document.getElementById("sh").value = "ш"; document.getElementById("sht").value = "щ"; document.getElementById("q").value = "ъ"; document.getElementById("qs").value = "ь"
-	 document.getElementById("w").value = "ю"; document.getElementById("ia").value = "я"   
-	
-	
+	   document.getElementById("f").value = "ф"; document.getElementById("h").value = "х"; document.getElementById("c").value = "ц"; document.getElementById("ch").value = "ч";
+	document.getElementById("sh").value = "ш"; document.getElementById("sht").value = "щ"; document.getElementById("q").value = "ъ"; document.getElementById("qs").value = "ь";
+	 document.getElementById("w").value = "ю"; document.getElementById("ia").value = "я";  */ 
+   
+   document.getElementById("а").value = "а"; document.getElementById("б").value = "б"; document.getElementById("в").value = "в"; document.getElementById("г").value = "г";
+   document.getElementById("д").value = "д"; document.getElementById("е").value = "е"; document.getElementById("ж").value = "ж"; document.getElementById("з").value = "з";
+document.getElementById("и").value = "и"; document.getElementById("й").value = "й"; document.getElementById("к").value = "к"; document.getElementById("л").value = "л";
+document.getElementById("м").value = "м"; document.getElementById("н").value = "н"; document.getElementById("о").value = "о"; document.getElementById("п").value = "п";   
+	 document.getElementById("р").value = "р"; document.getElementById("с").value = "с"; document.getElementById("т").value = "т"; document.getElementById("у").value = "у";
+	   document.getElementById("ф").value = "ф"; document.getElementById("х").value = "х"; document.getElementById("ц").value = "ц"; document.getElementById("ч").value = "ч";
+	document.getElementById("ш").value = "ш"; document.getElementById("щ").value = "щ"; document.getElementById("ъ").value = "ъ"; document.getElementById("ь").value = "ь";
+	 document.getElementById("ю").value = "ю"; document.getElementById("я").value = "я"; 
+   
+
+	 
 });// here ends $(document).ready(function(){
