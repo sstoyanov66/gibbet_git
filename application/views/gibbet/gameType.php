@@ -39,6 +39,25 @@
   </div><!-- warrning  modal end -->
 
 <!-- Small warnning Modal -->
+  <div class="modal fade" id="gibbetModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header-wc">
+          <!--  <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+          <h3 class="modal-title">Опааа!</h3>
+        </div>
+        <div class="modal-body">
+        <h4 id='realwrd'style="color:red"></h4>  
+           <img alt="gibbet" class="img-responsive" src="<?php echo base_url();?><?php echo $image; ?>">
+        </div>
+        <div class="modal-footer-wc">           
+          <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- warrning  modal end -->
+
+<!-- Small warnning Modal -->
   <div class="modal fade" id="loserModal" role="dialog">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -48,6 +67,7 @@
         </div>
         <div class="modal-body">
           <p><i>Реализирахте си бързо немъчително обесване!</i></p>
+          <h4 style="color:red">Думата беше <?php echo $realword; ?></h4>  
         </div>
         <div class="modal-footer-wc">     
           <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
@@ -81,10 +101,12 @@
       <div class="modal-content">
         <div class="modal-header-ok">
           <!--  <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-          <h3 class="modal-title">БРАВО!</h3>
+          <h3 class="modal-title"><?php echo $realword; ?></h3>        
         </div>
         <div class="modal-body">
+          <p>БРАВО!</p>
           <p><i>Познахте думата!</i></p>
+          
         </div>
         <div class="modal-footer-wd">
           <button type="button" class="btn btn-default" data-dismiss="modal">ОК</button>
@@ -96,7 +118,7 @@
  <!-- my project JS -->  <script src="<?php echo base_url();?>assets/js_gibb/gibbet.js"></script>
  
     
- <?php echo $jscript; ?>
+ <?php echo $jscript; ?><?php echo $javascript; ?><?php echo $ajaxphp; ?><?php echo $jsclose; ?>
  
    <!-- placed here to serve JS triggers of the modals above  - see  how it works with their session variables in validation functions in the controller -->
    <div class="btn-group">
@@ -109,6 +131,7 @@
    <div class="col-sm-3">
 
   <br>    
+  <div id="leftflash"></div>
   <?php echo $this->session->flashdata('msg'); ?>	<!--  successful entering terminal page-->  
 <?php echo validation_errors(); ?>
 
@@ -141,27 +164,27 @@
  
   <div class="btn-group btn-group-justified"> <!-- the way to justify buttons in a group is each of them to be wrapped in <div class="btn-group"> -->
  
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled  id="a"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="b"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="v"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="g"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="d"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="e"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="zh"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="z"></button></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="i"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="ii"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="а"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="б"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="в"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="г"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="д"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="е"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="ж"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="з"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="и"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="й"></div>
 </div>
  <div class="btn-group btn-group-justified">
 
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="k"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="l"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="m"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="n"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="o"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="p"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="r"></div> <div class="btn-group"> <input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="s"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="t"></div> <div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="u"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="к"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="л"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="м"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="н"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="о"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="п"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="р"></div> <div class="btn-group"> <input type="submit"  class="btn btn-sm btn-primary" disabled id="с"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="т"></div> <div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="у"></div>
 
 </div>
  <div class="btn-group btn-group-justified">
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="f"></div> <div class="btn-group"><input type="submit"  name="Letter" class="btn btn-sm btn-primary"  disabled id="h"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="c"></div> <div class="btn-group"><input type="submit"  name="Letter" class="btn btn-sm btn-primary"  disabled id="ch"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary"  disabled id="sh"></div> <div class="btn-group"><input type="submit"  name="Letter" class="btn btn-sm btn-primary" disabled id="sht"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="q"></div> <div class="btn-group"><input type="submit"  name="Letter" class="btn btn-sm btn-primary"  disabled id="qs"></div>
-<div class="btn-group"><input type="submit" name="Letter" class="btn btn-sm btn-primary" disabled id="w"></div> <div class="btn-group"><input type="submit"  name="Letter" class="btn btn-sm btn-primary"  disabled id="ia"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="ф"></div> <div class="btn-group"><input type="submit"   class="btn btn-sm btn-primary"  disabled id="х"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="ц"></div> <div class="btn-group"><input type="submit"   class="btn btn-sm btn-primary"  disabled id="ч"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary"  disabled id="ш"></div> <div class="btn-group"><input type="submit"   class="btn btn-sm btn-primary" disabled id="щ"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="ъ"></div> <div class="btn-group"><input type="submit"   class="btn btn-sm btn-primary"  disabled id="ь"></div>
+<div class="btn-group"><input type="submit"  class="btn btn-sm btn-primary" disabled id="ю"></div> <div class="btn-group"><input type="submit"   class="btn btn-sm btn-primary"  disabled id="я"></div>
  </div>
  
  <br><br><br>
@@ -175,6 +198,7 @@
   <?php echo form_close();?>
   
  <div class="col-sm-3">
+ <div id="rightflash"></div>
   <?php echo $this->session->flashdata('msg_sorry'); ?>	<!--  sorry user-->  
  <img alt="gibbet" class="img-responsive" src="<?php echo base_url();?><?php echo $image; ?>"> <!--  -->
  </div>
@@ -199,11 +223,11 @@
     </thead>
     <tbody>
       <tr class="success">
-        <td><?php echo $total; ?></td>
-        <td><?php echo $won; ?></td>
-        <td><?php echo $lost; ?></td>
-        <td><?php echo $guesses; ?></td>
-        <td><?php echo $instant; ?></td>
+        <td id="tot"><?php echo $total; ?></td>
+        <td id="won"><?php echo $won; ?></td>
+        <td id="lost"><?php echo $lost; ?></td>
+        <td id="gues"><?php echo $guesses; ?></td>
+        <td id="instn"><?php echo $instant; ?></td>
       </tr>
       
     </tbody>
