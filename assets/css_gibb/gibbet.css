@@ -19,7 +19,19 @@ height:40px;
 	opacity: 1;			
 }
 
+.navbar {
+    background-color:#80bfff;
+    border-color: #ffffff;      
+    }
+    
+.navbar-header .navbar-brand,  .container-fluid .navbar-text, #exitDB, #downloadDB {
+	color:black;
+}
 /*
+
+.navbar-right {
+	margin-right:20px;
+}
 
 table, th, td {
     border: 1px solid black;
