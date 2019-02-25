@@ -10,9 +10,10 @@ class Gibbet_model extends CI_Model {
       
       public function insert_user(){
           $gamername=$this->input->post('newname');  $passwrd=$this->input->post('newpswr');
+          $eMail=$this->input->post('email');
           
           $userHash = $this->password->password_hash($passwrd, PASSWORD_DEFAULT);
-          $record_data = array('name' =>$gamername, 'enterpass'=>$userHash); // save user and his pass hash in DB
+          $record_data = array('name' =>$gamername, 'enterpass'=>$userHash, 'mail'=>$eMail); // save user and his pass hash in DB
           $this->db->insert('users', $record_data);
           return $gamername;
     }
@@ -24,39 +25,45 @@ class Gibbet_model extends CI_Model {
         return $query->result_array(); 
     }
     
+    public function change_pass($email,$passwrd){
+        $userHash = $this->password->password_hash($passwrd, PASSWORD_DEFAULT);
+        $update = array("enterpass"=>$userHash);
+       return $this->db->set($update)->where('mail', $email)->update('users');
+    }
+    
     public function login_user($username){
         
         $update = array("logged_in"=>true );
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     
     public function logout_user($username){
       
         $update = array("logged_in"=>false );
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     public function challng_user($username, $enemy){
        
         $update = array("challenge_by"=>$enemy );
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     
     public function unchallng_user($username){
         
         $update = array("challenge_by"=>"" );
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     
     public function ingame_user($username){
         
         $update = array("in_game"=>true );
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     
     public function outgame_user($username){
         
         $update = array("in_game"=>false,"challenge_by"=>"","word_online"=>"", "discrip_online"=> "", "hidden_online"=>"");
-        $this->db->set($update)->where('name', $username)->update('users'); // <--update user statistics columns
+        $this->db->set($update)->where('name', $username)->update('users'); 
     }
     
     public function get_challenge($username){
@@ -208,24 +215,28 @@ class Gibbet_model extends CI_Model {
     }
     
     
-    public function guess_Letter($usedSymbols){
+    public function guess_Letter($usedSymbols=NULL){
         
+        if($usedSymbols==NULL){ $usedSymbols=array('^'); } // the usedSymbols array is initialised as array(should not be empty!!) with the 1st click when $usedSymbols==NULL 
+                  
         $letter_field = $this->input->post('Letter');
         $word=$this->session->gibbetWord; // get session of the random chosen word
         
-        if (in_array($letter_field,$usedSymbols) ){   // check if entered has been used already    	
-        $letterExists=true ;
+        if (in_array($letter_field,$usedSymbols) ){   // check if entered has been used already
+            $letterExists=true ;
         }else{$letterExists=false ; }
-        	    
+        
         $wordsArray=explode(' ', $word);   //array of all words in the string --in case there are more than 1 word
         $arrlength = count($wordsArray);
-        
-        $yes_no= $ok =false; // the letter / word is guessed/not
+      
         $currHiddenWord= array(); //
         $words=array(); //
-        $usedLetters=$usedSymbols;
-        $wholeWord='';
         
+        $wholeWord='';
+        $yes_no= $ok =false; // the letter / word is guessed/not
+        
+        $usedLetters=$usedSymbols;
+      
         if(!$letterExists){//letter 1st time entered
         for($k = 0; $k < $arrlength; $k++) {
         	        	       	
@@ -241,7 +252,7 @@ class Gibbet_model extends CI_Model {
         		$currHiddenWord[$i]=' _';
         	}
         	
-        	for($i = 0; $i < $wrdlngth-1; $i++){
+        	for($i = 1; $i < $wrdlngth-1; $i++){
         		for($d = 0; $d < $usedlength; $d++){
         			
         			if ($arrayLetters[$i] ==$usedSymbols[$d]) { //<--keep already guessed letters
@@ -278,9 +289,10 @@ class Gibbet_model extends CI_Model {
         	$ok=true;
         }
         
+      
         return [$wholeWord,$yes_no, $usedLetters,$ok]; // the session hiddenword is going to be overriden in the controller
+   
     }
-    
     
     public function guess_word(){
         
@@ -299,10 +311,10 @@ class Gibbet_model extends CI_Model {
         }
         //To equalise all letters and save problems with Upper/Lower case I change 1st letter to lowercase where strtolower() is needed. 
         //However it doesn't work with Cyrillic chars that's why I use the utf-8 compatible mb_strtolower():
-        $guess_field = mb_strtolower($noSpaces,'UTF-8');
-        $word= mb_strtolower($this->session->gibbetWord,'UTF-8');
+        $guess_field = trim(mb_strtolower($noSpaces,'UTF-8'));
+        $word= trim(mb_strtolower($this->session->gibbetWord,'UTF-8'));
        // the next string function compares case insensetively the string session of the chosen word and string imput for the instant guess. Result is integer. Need to add -1 to it because of the "" added up in the loop
-        $yes_no= strcasecmp($guess_field, $word)-1; 
+        $yes_no= strcasecmp($guess_field, $word); 
       
         //if result is 0 they are equal
         return $yes_no;
