@@ -551,12 +551,12 @@ $config['proxy_ips'] = '';
  | 
  */
 $config['protocol'] = 'sendmail';
-$config["smtp_host"] = "server26.superhosting.bg";  //  smtp-out.spf.superhosting.bg
-$config["smtp_port"] = "25";  //587
+$config["smtp_host"] = "server100.super.bg";  //  smtp-out.spf.superhosting.bg
+$config["smtp_port"] = "28";  //587
 //$config["smtp_crypto"] ='ssl'; //or'tls';
 $config["dsn"] = false; //Enable notify message from server
-$config["smtp_user"] = "info@sstoyanov.eu";
-$config["smtp_pass"] = "100yan4o"; 
+$config["smtp_user"] = "infos@sstoyanov.eu";
+$config["smtp_pass"] = "Stoyanchev"; 
 
 
 /*
